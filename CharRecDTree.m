@@ -20,12 +20,22 @@ TestClassLabels=cell2mat(TestClassLabels);
 % constructing decision tree 
 dtr=fitctree(TrainFeatures,TrainClass,'MinLeafSize',20);
 view(dtr,'Mode','Graph');
- 
-%calculating confusion matrix
-[Accuracy,Precision,Recall]=confusionmatrix(ValidationData,dtr);
+dtr_predict_lables = predict(dtr,TestFeatures);
 
+%calculating confusion matrix
+[TP,FP,FN,TN]=confusionmatrix(TestClassLabels,dtr_predict_lables);
+
+Accuracy=(TP+TN)/(P+N)
+Precision=TP/(TP+FP)
+Recall=TP/(TP+FN)
 
 
 % Knn method 
 Mdl = fitcknn(TrainFeatures,TrainClass,'NumNeighbors',5,'Standardize',1)
-predicted_labels = predict(Mdl,TestFeatures);
+knn_predict_lables = predict(Mdl,TestFeatures);
+%calculating confusion matrix
+[TP,FP,FN,TN]=confusionmatrix(TestClassLabels,knn_predict_lables);
+
+Accuracy=(TP+TN)/(P+N);
+Precision=TP/(TP+FP);
+Recall=TP/(TP+FN);
