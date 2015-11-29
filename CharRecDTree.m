@@ -23,19 +23,12 @@ view(dtr,'Mode','Graph');
 dtr_predict_lables = predict(dtr,TestFeatures);
 
 %calculating confusion matrix
-[TP,FP,FN,TN]=confusionmatrix(TestClassLabels,dtr_predict_lables);
-
-Accuracy=(TP+TN)/(P+N)
-Precision=TP/(TP+FP)
-Recall=TP/(TP+FN)
+[TP1,FP1,FN1,TN1]=confusionmatrix(TestClassLabels,dtr_predict_lables);
 
 
 % Knn method 
 Mdl = fitcknn(TrainFeatures,TrainClass,'NumNeighbors',5,'Standardize',1)
 knn_predict_lables = predict(Mdl,TestFeatures);
 %calculating confusion matrix
-[TP,FP,FN,TN]=confusionmatrix(TestClassLabels,knn_predict_lables);
+[TP2,FP2,FN2,TN2]=confusionmatrix(TestClassLabels,knn_predict_lables);
 
-Accuracy=(TP+TN)/(P+N);
-Precision=TP/(TP+FP);
-Recall=TP/(TP+FN);
