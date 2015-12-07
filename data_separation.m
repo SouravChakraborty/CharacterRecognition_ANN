@@ -15,9 +15,9 @@ temp = 0;
 
 for idx = 1:26
     trainEndIdx = floor(0.7*occ(counter));
-    temp = temp + occ(counter);    
+    temp = temp + occ(counter);
     testEndIdx = temp;
-        
+    
     if(counter == 1)
         testStartIdx = trainEndIdx + 1;
         TrainData = cell(trainStartIdx:trainEndIdx, :);
@@ -34,4 +34,23 @@ for idx = 1:26
     
     counter = counter + 1;
     trainStartIdx = testEndIdx + 1;
-    end
+end
+
+TrainFeatures=TrainData(:,2:17);
+TrainFeatures=cell2mat(TrainFeatures);
+TrainClass = TrainData(:,1:1);
+TrainClass=cell2mat(TrainClass);
+
+TestFeatures = TestData(:,2:17);
+TestFeatures=cell2mat(TestFeatures);
+TestClassLabels = TestData(:,1:1);
+TestClassLabels=cell2mat(TestClassLabels);
+
+
+dtr=fitctree(TrainFeatures,TrainClass,'MinLeafSize',50);
+view(dtr,'Mode','Graph');
+dtr_predict_lables = predict(dtr,TestFeatures);
+
+%calculating confusion matrix
+[TP1,FP1,FN1,TN1]=confusionmatrix(TestClassLabels,dtr_predict_lables);
+
