@@ -25,12 +25,26 @@ trainT=int16(trainT)-64;
 testT=int16(testT)-64;
 
 
+
 % BackPropAlgo(TestFeatures,TestClassLabels);
 
 % Pattern Recognition with neural network 
 newTrainX=trainX';
 
 newTrainT=full(ind2vec(double(trainT')));
+
+
+% % % % % % % % % % % %  Backpropagation setting parameters 
+ eta = 0.05
+ Nin = 16
+ Nhidden = 30
+ Nout=26
+
+
+% obj=Backpropagation(newTrainX,newTrainT,eta,Nin,Nout,Nhidden)
+% 
+% [errorValue,delta_V,delta_W]=obj.trainNeuralNet();
+% 
 
 % Pattern Recognition with neural network 
 
