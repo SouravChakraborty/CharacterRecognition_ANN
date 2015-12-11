@@ -21,8 +21,8 @@ testT = TestData(:,1:1);
 testT=cell2mat(testT);
 
 %%% Conversion of categorical classlabels to numericlabels %%%%
-trainT=int16(trainT)-64;
-testT=int16(testT)-64;
+trainT=double(trainT)-64;
+testT=double(testT)-64;
 
 
 
@@ -37,13 +37,13 @@ newTrainT=full(ind2vec(double(trainT')));
 % % % % % % % % % % % %  Backpropagation setting parameters 
  eta = 0.05;
  Nin = 16;
- Nhidden = 30;
- Nout = 26;
+ Nhidden = 12;
+ Nout = 1;
 
 
-% obj=Backpropagation(newTrainX,newTrainT,eta,Nin,Nout,Nhidden)
+obj=Backpropagation(newTrainX,trainT,eta,Nin,Nout,Nhidden)
 % 
-% [errorValue,delta_V,delta_W]=obj.trainNeuralNet();
+obj.BackPropagationANN();
 % 
 
 % Pattern Recognition with neural network 
