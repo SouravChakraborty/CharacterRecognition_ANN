@@ -35,10 +35,10 @@ newTrainT=full(ind2vec(double(trainT')));
 
 
 % % % % % % % % % % % %  Backpropagation setting parameters 
- eta = 0.05
- Nin = 16
- Nhidden = 30
- Nout=26
+ eta = 0.05;
+ Nin = 16;
+ Nhidden = 30;
+ Nout = 26;
 
 
 % obj=Backpropagation(newTrainX,newTrainT,eta,Nin,Nout,Nhidden)
