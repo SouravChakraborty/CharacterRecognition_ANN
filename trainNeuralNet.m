@@ -1,8 +1,3 @@
-%Created By : Anoop.V.S & Lekshmi B G
- 
-%Created On : 18-09-2013
- 
-%Description : Function to train the network
  
 function [errorValue delta_V delta_W] = trainNeuralNet(Input, Output, V, W, delta_V, delta_W)
  
