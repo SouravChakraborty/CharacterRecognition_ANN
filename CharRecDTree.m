@@ -41,9 +41,9 @@ newTrainT=full(ind2vec(double(trainT')));
  Nout = 1;
 
 
-% obj=Backpropagation(newTrainX,trainT,eta,Nin,Nout,Nhidden,testX,testT)
-% % 
-% obj.BackPropagationANN();
+ obj=Backpropagation(newTrainX,trainT,eta,Nin,Nout,Nhidden,testX,testT)
+ 
+ obj.BackPropagationANN();
 % 
 
 % Pattern Recognition with neural network 
@@ -70,9 +70,9 @@ testIndices = vec2ind(newTestY);
 newTestYT=full(ind2vec(double(testIndices)));
  plotconfusion(newTestT,newTestY)
 [c,cm] = confusion(newTestT,newTestYT);
-fprintf('performance measures by backpropogation tree classification\n');
-fprintf('Percentage Correct Classification   : %f%%\n', 100*(1-c));
-fprintf('Percentage Incorrect Classification : %f%%\n', 100*c);
+% fprintf('performance measures by backpropogation tree classification\n');
+% fprintf('Percentage Correct Classification   : %f%%\n', 100*(1-c));
+% fprintf('Percentage Incorrect Classification : %f%%\n', 100*c);
 
 
 
@@ -92,7 +92,7 @@ tsTarg,tsOut,'Testing')
 
 % Verifying classification performance measures with Decision Tree
 dtr=fitctree(trainX,trainT,'MinLeafSize',50);
-% view(dtr,'Mode','Graph');
+view(dtr,'Mode','Graph');
 testY = predict(dtr,testX);
 
 dtrTestX=testX';

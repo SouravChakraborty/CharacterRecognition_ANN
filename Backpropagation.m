@@ -1,12 +1,10 @@
 classdef Backpropagation
     properties
+%         Parameters of backpropagation 
         trainingX=[];
         trainingT=[];
-        
         testX=[];
         testT=[];
-        
-        
         eta=0.05;
         Nin=0;
         Nout=0;
@@ -19,12 +17,10 @@ classdef Backpropagation
     end
     
     methods
-        
-        %   Each training example is a pair of theform (x,t), where x' is the vector of network input
-        %   values, and is the vector of target network output values.
-        %   q is the learning rate (e.g., .O5). ni, is the number of network inputs, nhidden the number of units in the hidden layer, and no,, the number of output units.
-        %   The inputfiom unit i into unit j is denoted xji, and the weightfrom unit i to unit j is denoted wji.
-        
+        %   Initialize the object with traning attributes, training classes
+        %   no. of input,hidden and output neurons and test attributes and
+        %   test target classes
+       
         function self=Backpropagation(trainingX,trainingT,eta,Nin,Nout,Nhidden,testX,testT)
             
             for indx=1:size(trainingX,1)
@@ -34,7 +30,6 @@ classdef Backpropagation
                 trainingT = trainingT / max(abs(trainingT(:)));
             end
             
-            
             for indx=1:size(testX,1)
                 testX(indx,:) = testX(indx,:)/ max(abs(testX(indx,:)));
             end
@@ -42,15 +37,12 @@ classdef Backpropagation
                 testT = testT / max(abs(testT(:)));
             end
             
-            
-            
+       
             self.trainingX=trainingX;
             self.trainingT=trainingT';
             
             self.testX=testX';
             self.testT=testT';
-            
-            
             self.eta=eta;
             self.Nin=Nin;
             self.Nout=Nout;
@@ -58,31 +50,24 @@ classdef Backpropagation
             self.errorValue=0.6;
             self.nargin = 4;
             
-            %Initialize the weight matrices with random weights
-            
             [l,b] = size(self.trainingX);
             [n,a] = size(self.trainingT);
             
             self.IHW = rand(l,Nhidden); % Weight matrix from Input to Hidden  V 16 X 30
             self.HOW = rand(Nhidden,n); % Weight matrix from Hidden to Output W 30 X 26
-            
-            
-            
+       
         end
         
         function  BackPropagationANN(self)
             
-            %---Setting the training parameters
-            iterations = 1000;
+            %---Set training constraints
+            iterations = 10;
             errorThreshhold = 0.1;
             learningRate = 0.5;
-            %---Set hidden layer type, for example: [4, 3, 2]
+            %---Set hidden layer type: 1 hidden layer with 12 neurons 
             hiddenNeurons = [12];
             
-            %---'Xor' training data
-%             trainInp = [0 0; 0 1; 1 0; 1 1];
-%             trainOut = [0; 1; 1; 0];
-
+            
             trainInp=self.trainingX';
             trainOut = self.trainingT';
             testInp = self.testX';
@@ -116,9 +101,9 @@ classdef Backpropagation
                 biasCell{i} = unifrnd(b, e, 1, layerOfNeurons(i));
             end
             
-            %----------------------
-            %---Begin training
-            %----------------------
+
+            %---Start training 
+            
             for iter = 1:iterations
                 for i = 1:trainsetCount
                     choice = i;
@@ -128,7 +113,7 @@ classdef Backpropagation
                     [weightCell, biasCell] = self.BackPropagate(learningRate, sampleIn, realOutput, sampleTarget, layerOfNeurons, ...
                         weightCell, biasCell, layerOutputCells);
                 end
-                %plot overall network error at end of each iteration
+                
                 error = zeros(trainsetCount, outArgc);
                 for t = 1:trainsetCount
                     [predict, layeroutput] = self.ForwardNetwork(trainInp(t, :), layerOfNeurons, weightCell, biasCell);
@@ -137,12 +122,15 @@ classdef Backpropagation
                 end
                 err(iter) = (sum(error.^2)/trainsetCount)^0.5;
               err
-                %---Stop if reach error threshold
+              
+                %---break the loop when the error is less than threshold
                 if err(iter) < errorThreshhold
                     break;
                 end
             end
-            
+            figure();
+             plot(err);
+             
             %--Test the trained network with a test set
             testsetCount = size(testInp, 1);
             error = zeros(testsetCount, outArgc);
@@ -151,7 +139,9 @@ classdef Backpropagation
                 q(t) = predict;
                 error(t, : ) = predict - testRealOut(t, :);
             end
-            %---Print predictions
+            
+           
+            %---Calculate the accuracy for backpropagation 
             fprintf('Ended with %d iterations.\n', iter);
             a = testInp;
             b = testRealOut;
@@ -171,27 +161,15 @@ classdef Backpropagation
             newPCYT=full(ind2vec(double(indPC)));
             newACYT=full(ind2vec(double(indAC)));
             [c,cm] = confusion(newACYT,newPCYT)
-            
-            x1_x2_act_pred_err = [a b c c-b]
-            %---Plot Surface of network predictions
-            testInpx1 = [-1:0.1:1];
-            testInpx2 = [-1:0.1:1];
-            [X1, X2] = meshgrid(testInpx1, testInpx2);
-            testOutRows = size(X1, 1);
-            testOutCols = size(X1, 2);
-            testOut = zeros(testOutRows, testOutCols);
-            for row = [1:testOutRows]
-                for col = [1:testOutCols]
-                    test = [X1(row, col), X2(row, col)];
-                    [out, l] = self.ForwardNetwork(test, layerOfNeurons, weightCell, biasCell);
-                    testOut(row, col) = out;
-                end
-            end
-            figure(2);
-            surf(X1, X2, testOut);
+            fprintf('performance measures by backpropogation tree classification\n');
+fprintf('Percentage Correct Classification   : %f%%\n', 100*(c));
+fprintf('Percentage Incorrect Classification : %f%%\n', 100*(1-c));
+
         end
         
-        %% BackPropagate: Backpropagate the output through the network and adjust weights and biases
+     
+        % backpropagaton of the output through the network with adjusted
+        % weights and biases
         function [weightCell, biasCell] = BackPropagate(self,rate, in, realOutput, sampleTarget, layer, weightCell, biasCell, layerOutputCells)
             layerCount = size(layer, 2);
             delta = cell(1, layerCount);
@@ -224,8 +202,7 @@ classdef Backpropagation
             end
         end
         
-        
-        %% ForwardNetwork: Compute feed forward neural network, Return the output and output of each neuron in each layer
+        %compute feed farwardnetwork
         function [realOutput, layerOutputCells] = ForwardNetwork(self,in, layer, weightCell, biasCell)
             layerCount = size(layer, 2);
             layerOutputCells = cell(1, layerCount);
