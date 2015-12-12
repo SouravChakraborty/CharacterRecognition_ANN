@@ -119,8 +119,7 @@ classdef Backpropagation
                     error(t, : ) = predict - trainOut(t, :);
                 end
                 err(iter) = (sum(error.^2)/trainsetCount)^0.5;
-                figure(1);
-                plot(err);
+              err
                 %---Stop if reach error threshold
                 if err(iter) < errorThreshhold
                     break;
